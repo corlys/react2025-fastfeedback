@@ -9,26 +9,27 @@ import queryString from "query-string";
 import {
   getAuth,
   User,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GithubAuthProvider,
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-
 import app from "./firebase";
-const checkApp = app || "";
 
 interface Auth extends User {
   userId: string | null;
-  signin: (email: string, password: string) => any;
+  signInWithGitHub: () => any;
   signout: () => any;
 }
 
 const AuthContext = createContext<Auth | null>(null);
 
 export function ProvideAuth({ children }: { children: ReactNode }) {
-  const auth = useProvideAuth();
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+  const initializeFirebase = app || "";
+  if (initializeFirebase !== "") {
+    const auth = useProvideAuth();
+    return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+  }
 }
 
 export const useAuth = () => {
@@ -37,25 +38,14 @@ export const useAuth = () => {
 
 function useProvideAuth() {
   const [user, setUser] = useState<User | null>(null);
+  const provider = new GithubAuthProvider();
 
-  const signin = (email: string, password: string) => {
+  const signInWithGitHub = () => {
     const auth = getAuth();
-    return signInWithEmailAndPassword(auth, email, password).then(
-      (response) => {
-        setUser(response.user);
-        return response.user;
-      }
-    );
-  };
-
-  const signup = (email, password) => {
-    const auth = getAuth();
-    return createUserWithEmailAndPassword(auth, email, password).then(
-      (response) => {
-        setUser(response.user);
-        return response.user;
-      }
-    );
+    return signInWithPopup(auth, provider).then((response) => {
+      setUser(response.user);
+      return response.user;
+    });
   };
 
   const signout = () => {
@@ -77,7 +67,7 @@ function useProvideAuth() {
 
   return {
     userId: user && user.uid,
-    signin,
+    signInWithGitHub,
     signout,
     ...user,
   };
