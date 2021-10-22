@@ -15,16 +15,17 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import app from "./firebase";
+import { createUser } from "./db";
 
-interface Auth extends User {
-  userId: string | null;
+interface IAuth {
   signInWithGitHub: () => any;
   signout: () => any;
+  user: User;
 }
 
-const AuthContext = createContext<Auth | null>(null);
+const AuthContext = createContext<IAuth | null>(null);
 
-export function ProvideAuth({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const initializeFirebase = app || "";
   if (initializeFirebase !== "") {
     const auth = useProvideAuth();
@@ -44,6 +45,7 @@ function useProvideAuth() {
     const auth = getAuth();
     return signInWithPopup(auth, provider).then((response) => {
       setUser(response.user);
+      createUser(response.user);
       return response.user;
     });
   };
@@ -66,10 +68,9 @@ function useProvideAuth() {
   }, []);
 
   return {
-    userId: user && user.uid,
     signInWithGitHub,
     signout,
-    ...user,
+    user,
   };
 }
 
