@@ -6,8 +6,7 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
   const snapshot = await sitesRef.get();
 
   if (snapshot.empty) {
-    console.log("No matching documents.");
-    return res.status(400);
+    return res.status(400).json({ sites: [] });
   }
 
   let sites = [];
@@ -16,5 +15,5 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
     sites.push({ id: doc.id, ...doc.data() });
   });
 
-  res.status(200).json(sites);
+  return res.status(200).json({ sites });
 }

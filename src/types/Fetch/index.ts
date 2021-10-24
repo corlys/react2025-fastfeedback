@@ -1,9 +1,9 @@
-export interface DataPaylaod<T> {
-  [key: string]: T;
+import { ISiteFirebase } from "../Forms";
+
+export interface ISiteFetch extends ISiteFirebase {
+  id?: string;
 }
 
-export interface DataResponse<T> {
-  data: T;
-  isLoading: boolean;
-  isError: any;
+export interface ISiteData {
+  sites: ISiteFetch[];
 }

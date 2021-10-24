@@ -1,20 +1,23 @@
 import useSWR from "swr";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 import DashboardShell from "@/components/DashboardShell";
 import EmptyState from "@/components/EmptyState";
 import SiteTableSkeleton from "@/components/SiteTableSkeleton";
-import { useAuth } from "@/lib/auth";
 import fetcher from "@/utils/fetch";
+import { ISiteData } from "@/types/Fetch";
+import SiteTable from "@/components/SiteTable";
 
 const Dashboard = () => {
-  const auth = useAuth();
-  const router = useRouter();
-  const { data, error } = useSWR("/api/sites", fetcher);
+  const { data, error } = useSWR<ISiteData>("/api/sites", fetcher);
   return (
     <DashboardShell>
-      {!data ? <SiteTableSkeleton /> : <EmptyState />}
+      {!data ? (
+        <SiteTableSkeleton />
+      ) : data.sites.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <SiteTable sites={data.sites} />
+      )}
     </DashboardShell>
   );
 };

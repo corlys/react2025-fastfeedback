@@ -8,7 +8,7 @@ import {
 } from "firebase/firestore/lite";
 
 import app from "./firebase";
-import { ISiteData } from "@/types/Forms";
+import { ISiteFirebase } from "@/types/Forms";
 
 const db = app && getFirestore(app);
 
@@ -30,7 +30,7 @@ export const createUser = async (data: User) => {
   }
 };
 
-export const registerWebsite = async (site: ISiteData) => {
+export const registerWebsite = async (site: ISiteFirebase) => {
   try {
     const docRef = await addDoc(collection(db, "sites"), {
       ...site,

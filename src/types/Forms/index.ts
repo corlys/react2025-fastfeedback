@@ -3,7 +3,7 @@ export interface ISiteForm {
   url: string;
 }
 
-export interface ISiteData extends ISiteForm {
+export interface ISiteFirebase extends ISiteForm {
   authorId: string;
   createdAt: string;
 }
