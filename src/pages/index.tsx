@@ -1,9 +1,11 @@
 import { Text, Stack, Button, Heading, Center } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 import { Main } from "@/components/Main";
 import { useAuth } from "@/lib/auth";
 import { Logo } from "@/components/CustomIcons/Logo";
 const Index = () => {
+  const router = useRouter();
   const auth = useAuth();
   return (
     <Main>
@@ -27,10 +29,10 @@ const Index = () => {
           <Button
             width="min"
             onClick={() => {
-              auth && auth.signout();
+              router.push("/dashboard");
             }}
           >
-            Sign Out
+            Go to dashboard
           </Button>
         )}
       </Stack>

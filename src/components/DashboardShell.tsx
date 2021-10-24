@@ -3,20 +3,21 @@ import {
   Flex,
   Link,
   Avatar,
-  Text,
+  Button,
   Stack,
   Breadcrumb,
   Heading,
   BreadcrumbItem,
   BreadcrumbLink,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 import { Logo } from "./CustomIcons/Logo";
 import { useAuth } from "@/lib/auth";
 
 const DashboardShell = ({ children }: { children: ReactNode }) => {
   const auth = useAuth();
-
+  const router = useRouter();
   return (
     <Flex flexDirection="column">
       <Flex
@@ -31,7 +32,17 @@ const DashboardShell = ({ children }: { children: ReactNode }) => {
           <Link>Feedback</Link>
         </Stack>
         <Stack spacing={4} isInline alignItems="center">
-          <Text>Text value</Text>
+          {auth?.user && (
+            <Button
+              onClick={() => {
+                auth.signout();
+                router.push("/");
+              }}
+              variant="ghost"
+            >
+              Log Out
+            </Button>
+          )}
           <Avatar src={auth?.user?.photoURL} />
         </Stack>
       </Flex>

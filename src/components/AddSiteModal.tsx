@@ -11,19 +11,36 @@ import {
   FormControl,
   FormLabel,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
 
 import { ISiteForm } from "@/types/Forms";
 import { registerWebsite } from "@/lib/db";
+import { useAuth } from "@/lib/auth";
 
 const AddSiteModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = useRef();
   const { register, handleSubmit } = useForm();
-
-  const onSubmit = (data: ISiteForm) => console.log(registerWebsite(data));
+  const toast = useToast();
+  const auth = useAuth();
+  const onSubmit = (data: ISiteForm) => {
+    registerWebsite({
+      authorId: auth.user.uid,
+      createdAt: new Date().toISOString(),
+      ...data,
+    });
+    toast({
+      title: "Site registered.",
+      description: "We've added website for you..",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
+    onClose();
+  };
 
   return (
     <>
