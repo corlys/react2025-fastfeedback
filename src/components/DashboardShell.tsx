@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { Logo } from "./CustomIcons/Logo";
 import { useAuth } from "@/lib/auth";
 import AddSiteModal from "./AddSiteModal";
+import { DarkModeSwitch } from "./DarkModeSwitch";
 
 const DashboardShell = ({ children }: { children: ReactNode }) => {
   const auth = useAuth();
@@ -32,7 +33,8 @@ const DashboardShell = ({ children }: { children: ReactNode }) => {
           <Link>Sites</Link>
           <Link>Feedback</Link>
         </Stack>
-        <Stack spacing={4} isInline alignItems="center">
+        <Stack spacing={2} isInline alignItems="center">
+          <DarkModeSwitch />
           {auth?.user && (
             <Button
               onClick={() => {

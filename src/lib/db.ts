@@ -9,6 +9,7 @@ import {
 
 import app from "./firebase";
 import { ISiteFirebase } from "@/types/Forms";
+import { IFeedbackSkeleton } from "@/types/Fetch";
 
 const db = app && getFirestore(app);
 
@@ -27,6 +28,7 @@ export const createUser = async (data: User) => {
     );
   } catch (error) {
     console.error("Error adding document: ", error);
+    return { error };
   }
 };
 
@@ -38,5 +40,17 @@ export const registerWebsite = async (site: ISiteFirebase) => {
     return docRef;
   } catch (error) {
     console.error("Error adding document: ", error);
+    return { error };
+  }
+};
+
+export const createFeedback = async (feedback: IFeedbackSkeleton) => {
+  try {
+    const feedRef = await addDoc(collection(db, "feedback"), {
+      ...feedback,
+    });
+    return feedRef;
+  } catch (error) {
+    return { error };
   }
 };

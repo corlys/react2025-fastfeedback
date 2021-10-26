@@ -6,17 +6,18 @@ import SiteTableSkeleton from "@/components/SiteTableSkeleton";
 import fetcher from "@/utils/fetch";
 import { ISiteData } from "@/types/Fetch";
 import SiteTable from "@/components/SiteTable";
+import { ResponseData } from "@/types/Fetch";
 
 const Dashboard = () => {
-  const { data, error } = useSWR<ISiteData>("/api/sites", fetcher);
+  const { data } = useSWR<ResponseData<ISiteData>>("/api/sites", fetcher);
   return (
     <DashboardShell>
       {!data ? (
         <SiteTableSkeleton />
-      ) : data.sites.length === 0 ? (
+      ) : data.payload.sites.length === 0 ? (
         <EmptyState />
       ) : (
-        <SiteTable sites={data.sites} />
+        <SiteTable data={data.payload} />
       )}
     </DashboardShell>
   );
