@@ -11,25 +11,60 @@ import {
   FormControl,
   FormLabel,
   Input,
+  useToast,
+  ButtonProps,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { useRef } from "react";
+import { useSWRConfig } from "swr";
 
 import { ISiteForm } from "@/types/Forms";
 import { registerWebsite } from "@/lib/db";
+import { useAuth } from "@/lib/auth";
 
-const AddSiteModal = () => {
+const AddSiteModal = (props: ButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const initialRef = useRef();
-  const { register, handleSubmit } = useForm();
-
-  const onSubmit = (data: ISiteForm) => console.log(registerWebsite(data));
+  const { register, handleSubmit, reset } = useForm();
+  const toast = useToast();
+  const auth = useAuth();
+  const { mutate } = useSWRConfig();
+  const onSubmit = (formData: ISiteForm) => {
+    const newSite = {
+      authorId: auth.user.uid,
+      createdAt: new Date().toISOString(),
+      ...formData,
+    };
+    mutate(
+      "/api/sites",
+      async (data) => {
+        return {
+          sites: [...data.sites, newSite],
+        };
+      },
+      false
+    );
+    registerWebsite(newSite);
+    mutate("/api/sites");
+    toast({
+      title: "Site registered.",
+      description: "We've added website for you..",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
+    onClose();
+  };
 
   return (
     <>
-      <Button onClick={onOpen}>Add new website</Button>
+      <Button
+        onClick={() => {
+          onOpen();
+          reset();
+        }}
+        {...props}
+      />
 
-      <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader fontWeight="bold">Add Site</ModalHeader>
@@ -37,11 +72,7 @@ const AddSiteModal = () => {
           <ModalBody pb={6}>
             <FormControl>
               <FormLabel>Name</FormLabel>
-              <Input
-                ref={initialRef}
-                placeholder="My site"
-                {...register("name")}
-              />
+              <Input placeholder="My site" {...register("name")} />
             </FormControl>
 
             <FormControl mt={4}>
