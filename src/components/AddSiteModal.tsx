@@ -37,7 +37,7 @@ const AddSiteModal = (props: ButtonProps) => {
       "/api/sites",
       async (data) => {
         return {
-          sites: [...data.sites, newSite],
+          payload: { sites: [...data.payload.sites, newSite] },
         };
       },
       false

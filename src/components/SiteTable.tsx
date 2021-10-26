@@ -1,9 +1,10 @@
 import { Table, Tr, Td, Th, Thead, Tbody, Link, Box } from "@chakra-ui/react";
 import { format, parseISO } from "date-fns";
+import NextLink from "next/link";
 
-import { ISiteFetch } from "@/types/Fetch";
+import { ISiteData } from "@/types/Fetch";
 
-const SiteTable = ({ sites }: { sites: ISiteFetch[] }) => (
+const SiteTable = ({ data }: { data: ISiteData }) => (
   <Box
     overflowX="auto"
     border="1px solid"
@@ -68,7 +69,7 @@ const SiteTable = ({ sites }: { sites: ISiteFetch[] }) => (
         </Tr>
       </Thead>
       <Tbody>
-        {sites.map((site) => (
+        {data.sites.map((site) => (
           <Tr key={site.url} bgColor="white">
             <Td
               color="gray.900"
@@ -93,7 +94,9 @@ const SiteTable = ({ sites }: { sites: ISiteFetch[] }) => (
               borderBottom="1px solid"
               borderBottomColor="gray.300"
             >
-              <Link>View Feedback</Link>
+              <NextLink href="/p/[siteId]" as={`/p/${site.id}`}>
+                <Link>View Feedback</Link>
+              </NextLink>
             </Td>
             <Td
               color="gray.900"
