@@ -34,10 +34,10 @@ const AddSiteModal = (props: ButtonProps) => {
       ...formData,
     };
     mutate(
-      "/api/sites",
+      ["/api/sites", auth.user],
       async (data) => {
         return {
-          payload: { sites: [...data.payload.sites, newSite] },
+          payload: { sites: [newSite, ...data.payload.sites] },
         };
       },
       false

@@ -50,7 +50,7 @@ const DashboardShell = ({ children }: { children: ReactNode }) => {
         </Stack>
       </Flex>
       <Flex backgroundColor="gray.100" justifyContent="center" minH="100vh">
-        <Flex flexDirection="column" p={4} maxW="container.md" w="full" mt="4">
+        <Flex flexDirection="column" p={4} maxW="container.md" w="full" my="4">
           <Breadcrumb spacing={2}>
             <BreadcrumbItem>
               <BreadcrumbLink fontSize="sm">Sites</BreadcrumbLink>

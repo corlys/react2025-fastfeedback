@@ -7,9 +7,15 @@ import fetcher from "@/utils/fetch";
 import { ISiteData } from "@/types/Fetch";
 import SiteTable from "@/components/SiteTable";
 import { ResponseData } from "@/types/Fetch";
+import { useAuth } from "@/lib/auth";
 
 const Dashboard = () => {
-  const { data } = useSWR<ResponseData<ISiteData>>("/api/sites", fetcher);
+  const { user } = useAuth();
+
+  const { data } = useSWR<ResponseData<ISiteData>>(
+    user ? ["/api/sites", user] : null,
+    fetcher
+  );
   return (
     <DashboardShell>
       {!data ? (
