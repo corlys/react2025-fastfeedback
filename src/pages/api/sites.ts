@@ -1,20 +1,26 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { FirebaseError } from "@firebase/util";
 
+import { adminAuth } from "@/lib/firebase-admin";
 import { ISiteData, ResponseData } from "@/types/Fetch";
-import { getAllSites } from "@/lib/db-admin";
+import { getUserSites } from "@/lib/db-admin";
 
 export default async function handler(
-  _: NextApiRequest,
-  res: NextApiResponse<ResponseData<ISiteData | FirebaseError>>
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData<ISiteData>>
 ) {
-  const sites = await getAllSites();
-  if (sites instanceof FirebaseError) {
-    return res.status(500).json({ payload: sites });
+  try {
+    const { token } = req.headers;
+    const { uid } = await adminAuth.verifyIdToken(
+      typeof token === "string" && token
+    );
+    const sites = await getUserSites(uid);
+    return res.status(200).json({
+      payload: {
+        sites,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return Promise.reject(new Error("token invalid"));
   }
-  return res.status(200).json({
-    payload: {
-      sites,
-    },
-  });
 }

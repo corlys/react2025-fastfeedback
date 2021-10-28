@@ -14,6 +14,8 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
+import Cookies from "js-cookie";
+
 import app from "./firebase";
 import { createUser } from "./db";
 
@@ -46,14 +48,17 @@ function useProvideAuth() {
     return signInWithPopup(auth, provider).then((response) => {
       setUser(response.user);
       createUser(response.user);
+      Cookies.set("fast-feedback-auth", true, { expires: 7 });
       return response.user;
     });
   };
 
   const signout = () => {
     const auth = getAuth();
+
     return signOut(auth).then(() => {
       setUser(null);
+      Cookies.remove("fast-feedback-auth");
     });
   };
 
