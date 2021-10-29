@@ -68,9 +68,9 @@ const SiteTable = ({ data }: { data: ISiteData }) => (
           </Th>
         </Tr>
       </Thead>
-      <Tbody>
+      <Tbody bgColor="white">
         {data.sites.map((site) => (
-          <Tr key={site.url} bgColor="white">
+          <Tr key={site.url}>
             <Td
               color="gray.900"
               p={4}
@@ -95,7 +95,9 @@ const SiteTable = ({ data }: { data: ISiteData }) => (
               borderBottomColor="gray.300"
             >
               <NextLink href="/p/[siteId]" as={`/p/${site.id}`}>
-                <Link>View Feedback</Link>
+                <Link fontWeight="medium" color="blue.500">
+                  View Feedback
+                </Link>
               </NextLink>
             </Td>
             <Td

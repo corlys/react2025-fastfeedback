@@ -5,6 +5,7 @@ import {
   doc,
   addDoc,
   collection,
+  deleteDoc,
 } from "firebase/firestore/lite";
 
 import app from "./firebase";
@@ -53,4 +54,10 @@ export const createFeedback = async (feedback: IFeedbackSkeleton) => {
   } catch (error) {
     return { error };
   }
+};
+
+export const deleteFeedback = async (id: string) => {
+  try {
+    await deleteDoc(doc(db, "feedback", id));
+  } catch (error) {}
 };

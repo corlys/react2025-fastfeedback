@@ -29,7 +29,7 @@ export interface IFeedbackSkeleton {
 }
 
 export interface IFeedbackData {
-  feedback: IFeedbackSkeleton[] | [];
+  feedback: IFeedbackSkeleton[];
 }
 
 export interface ResponseData<T> {

@@ -4,31 +4,31 @@ import DashboardShell from "@/components/DashboardShell";
 import EmptyState from "@/components/EmptyState";
 import SiteTableSkeleton from "@/components/SiteTableSkeleton";
 import fetcher from "@/utils/fetch";
-import { ISiteData } from "@/types/Fetch";
-import SiteTable from "@/components/SiteTable";
+import { IFeedbackData } from "@/types/Fetch";
 import { ResponseData } from "@/types/Fetch";
 import { useAuth } from "@/lib/auth";
-import SiteTableHeader from "@/components/SiteTableHeader";
+import FeedbackTable from "@/components/FeedbackTable";
+import FeedbackTableHeader from "@/components/FeedbackTableHeader";
 
-const Dashboard = () => {
+const Feedback = () => {
   const { user } = useAuth();
 
-  const { data } = useSWR<ResponseData<ISiteData>>(
-    user ? ["/api/sites", user] : null,
+  const { data } = useSWR<ResponseData<IFeedbackData>>(
+    user ? ["/api/feedback", user] : null,
     fetcher
   );
   return (
     <DashboardShell>
-      <SiteTableHeader />
+      <FeedbackTableHeader />
       {!data ? (
         <SiteTableSkeleton />
-      ) : data.payload.sites.length === 0 ? (
+      ) : data.payload.feedback.length === 0 ? (
         <EmptyState />
       ) : (
-        <SiteTable data={data.payload} />
+        <FeedbackTable data={data.payload} />
       )}
     </DashboardShell>
   );
 };
 
-export default Dashboard;
+export default Feedback;
