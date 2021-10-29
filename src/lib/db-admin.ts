@@ -82,3 +82,31 @@ export const getUserSites = async (
     return Promise.reject(new Error(error));
   }
 };
+
+export const getUserFeedback = async (
+  userId: string
+): Promise<IFeedbackSkeleton[]> => {
+  try {
+    const feedRef = firestore
+      .collection("feedback")
+      .where("authorId", "==", userId);
+    const snapshot = await feedRef.get();
+
+    let feedback: IFeedbackSkeleton[] = [];
+
+    snapshot.forEach((doc) => {
+      feedback.push({ id: doc.id, ...doc.data() });
+    });
+
+    feedback.sort((site1, site2) =>
+      compareDesc(parseISO(site1.createdAt), parseISO(site2.createdAt))
+    );
+
+    return feedback;
+  } catch (error) {
+    // if (error instanceof FirebaseError) {
+    //   return error;
+    // }
+    return Promise.reject(new Error(error));
+  }
+};

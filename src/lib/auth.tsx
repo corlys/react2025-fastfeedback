@@ -11,17 +11,20 @@ import {
   User,
   signInWithPopup,
   GithubAuthProvider,
+  GoogleAuthProvider,
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 import app from "./firebase";
 import { createUser } from "./db";
 
 interface IAuth {
-  signInWithGitHub: () => any;
-  signout: () => any;
+  signInWithGitHub: () => Promise<User>;
+  signInWithGoogle: () => Promise<User>;
+  signout: () => Promise<void>;
   user: User;
 }
 
@@ -41,24 +44,35 @@ export const useAuth = () => {
 
 function useProvideAuth() {
   const [user, setUser] = useState<User | null>(null);
-  const provider = new GithubAuthProvider();
-
+  const router = useRouter();
   const signInWithGitHub = () => {
+    const provider = new GithubAuthProvider();
     const auth = getAuth();
     return signInWithPopup(auth, provider).then((response) => {
       setUser(response.user);
       createUser(response.user);
-      Cookies.set("fast-feedback-auth", true, { expires: 7 });
+      Cookies.set("fast-feedback-auth", true, { expires: 1 });
+      return response.user;
+    });
+  };
+
+  const signInWithGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
+    return signInWithPopup(auth, provider).then((response) => {
+      setUser(response.user);
+      createUser(response.user);
+      Cookies.set("fast-feedback-auth", true, { expires: 1 });
       return response.user;
     });
   };
 
   const signout = () => {
     const auth = getAuth();
-
     return signOut(auth).then(() => {
       setUser(null);
       Cookies.remove("fast-feedback-auth");
+      router.push("/");
     });
   };
 
@@ -74,6 +88,7 @@ function useProvideAuth() {
 
   return {
     signInWithGitHub,
+    signInWithGoogle,
     signout,
     user,
   };

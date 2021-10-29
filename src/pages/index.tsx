@@ -5,6 +5,9 @@ import Head from "next/head";
 import { Main } from "@/components/Main";
 import { useAuth } from "@/lib/auth";
 import { Logo } from "@/components/CustomIcons/Logo";
+import { FiGithub } from "react-icons/fi";
+import GoogleIcon from "@/components/CustomIcons/Google";
+
 const Index = () => {
   const router = useRouter();
   const auth = useAuth();
@@ -27,19 +30,50 @@ const Index = () => {
       </Center>
       <Stack spacing={4} align="center">
         {auth?.user?.email == null && (
-          <Button
-            width="min"
-            onClick={() => {
-              auth && auth.signInWithGitHub();
-            }}
-          >
-            Sign In
-          </Button>
+          <>
+            <Button
+              size="lg"
+              leftIcon={<FiGithub />}
+              width="min"
+              bgColor="gray.900"
+              color="white"
+              fontWeight="medium"
+              _hover={{ bg: "gray.700" }}
+              _active={{ bg: "gray.800", transform: "scale(0.95)" }}
+              onClick={() => {
+                auth && auth.signInWithGitHub();
+              }}
+            >
+              Sign In with Github
+            </Button>
+            <Button
+              size="lg"
+              leftIcon={<GoogleIcon />}
+              width="min"
+              bgColor="gray.100"
+              color="black"
+              fontWeight="medium"
+              _hover={{ bg: "gray.200" }}
+              _active={{ bg: "gray.800", transform: "scale(0.95)" }}
+              onClick={() => {
+                auth && auth.signInWithGoogle();
+              }}
+            >
+              Sign In with Google
+            </Button>
+          </>
         )}
         {auth?.user?.email && <Text>{auth?.user?.email}</Text>}
         {auth?.user?.email && (
           <Button
+            size="lg"
+            leftIcon={<Logo />}
             width="min"
+            bgColor="gray.100"
+            color="black"
+            fontWeight="medium"
+            _hover={{ bg: "gray.200" }}
+            _active={{ bg: "gray.800", transform: "scale(0.95)" }}
             onClick={() => {
               router.push("/dashboard");
             }}

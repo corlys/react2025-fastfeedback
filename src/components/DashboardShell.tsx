@@ -1,25 +1,14 @@
 import React, { ReactNode } from "react";
-import {
-  Flex,
-  Link,
-  Avatar,
-  Button,
-  Stack,
-  Breadcrumb,
-  Heading,
-  BreadcrumbItem,
-  BreadcrumbLink,
-} from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { Flex, Link, Avatar, Button, Stack } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 import { Logo } from "./CustomIcons/Logo";
 import { useAuth } from "@/lib/auth";
-import AddSiteModal from "./AddSiteModal";
 import { DarkModeSwitch } from "./DarkModeSwitch";
 
 const DashboardShell = ({ children }: { children: ReactNode }) => {
   const auth = useAuth();
-  const router = useRouter();
+  console.log(auth.user);
   return (
     <Flex flexDirection="column">
       <Flex
@@ -30,8 +19,12 @@ const DashboardShell = ({ children }: { children: ReactNode }) => {
       >
         <Stack spacing={4} isInline alignItems="center">
           <Logo color="black" boxSize="10" />
-          <Link>Sites</Link>
-          <Link>Feedback</Link>
+          <NextLink href="/dashboard" as={"/dashboard"}>
+            <Link>Sites</Link>
+          </NextLink>
+          <NextLink href="/feedback" as={"/feedback"}>
+            <Link>Feedback</Link>
+          </NextLink>
         </Stack>
         <Stack spacing={2} isInline alignItems="center">
           <DarkModeSwitch />
@@ -39,7 +32,6 @@ const DashboardShell = ({ children }: { children: ReactNode }) => {
             <Button
               onClick={() => {
                 auth.signout();
-                router.push("/");
               }}
               variant="ghost"
             >
@@ -51,23 +43,6 @@ const DashboardShell = ({ children }: { children: ReactNode }) => {
       </Flex>
       <Flex backgroundColor="gray.100" justifyContent="center" minH="100vh">
         <Flex flexDirection="column" p={4} maxW="container.md" w="full" my="4">
-          <Breadcrumb spacing={2}>
-            <BreadcrumbItem>
-              <BreadcrumbLink fontSize="sm">Sites</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
-          <Flex justify="space-between" direction="row" mb="8">
-            <Heading>Sites</Heading>
-            <AddSiteModal
-              bgColor="gray.900"
-              color="white"
-              fontWeight="medium"
-              _hover={{ bg: "gray.700" }}
-              _active={{ bg: "gray.800", transform: "scale(0.95)" }}
-            >
-              + Add Site
-            </AddSiteModal>
-          </Flex>
           {children}
         </Flex>
       </Flex>
