@@ -52,6 +52,7 @@ function useProvideAuth() {
       setUser(response.user);
       createUser(response.user);
       Cookies.set("fast-feedback-auth", true, { expires: 1 });
+      router.push("/dashboard");
       return response.user;
     });
   };
@@ -63,6 +64,7 @@ function useProvideAuth() {
       setUser(response.user);
       createUser(response.user);
       Cookies.set("fast-feedback-auth", true, { expires: 1 });
+      router.push("/dashboard");
       return response.user;
     });
   };

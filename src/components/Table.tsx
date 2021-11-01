@@ -35,7 +35,6 @@ const Th = (props: TableColumnHeaderProps) => (
   <ChakraTh
     textTransform="uppercase"
     fontSize="xs"
-    color="gray.500"
     fontWeight="bold"
     px={4}
     {...props}
@@ -44,7 +43,6 @@ const Th = (props: TableColumnHeaderProps) => (
 
 const Td = (props: TableCellProps) => (
   <ChakraTd
-    color="gray.900"
     p={4}
     borderBottom="1px solid"
     borderBottomColor="gray.300"
