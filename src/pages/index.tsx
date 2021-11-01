@@ -53,7 +53,7 @@ const Index = () => {
               bgColor="gray.100"
               color="black"
               fontWeight="medium"
-              _hover={{ bg: "gray.200" }}
+              _hover={{ bg: "gray.300" }}
               _active={{ bg: "gray.800", transform: "scale(0.95)" }}
               onClick={() => {
                 auth && auth.signInWithGoogle();

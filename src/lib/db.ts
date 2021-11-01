@@ -61,3 +61,9 @@ export const deleteFeedback = async (id: string) => {
     await deleteDoc(doc(db, "feedback", id));
   } catch (error) {}
 };
+
+const converter = <T>() => ({
+  toFirestore: (data: Partial<T>) => data,
+  fromFirestore: (snap: FirebaseFirestore.QueryDocumentSnapshot) =>
+    snap.data() as T,
+});
